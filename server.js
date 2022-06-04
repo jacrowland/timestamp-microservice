@@ -1,6 +1,9 @@
 const express = require('express');
 let app = express();
 
+//var cors = require('cors');
+//app.use(cors({optionsSuccessStatus: 200}));
+
 app.listen(8080);
 
 function rootLogger(req, res, next) {
@@ -8,22 +11,36 @@ function rootLogger(req, res, next) {
     next();
   }
 
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "OPTIONS, GET, POST, PUT, PATCH, DELETE"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
+  
+
 app.use(rootLogger);
 
-app.get('/api/:date', (req, res) => {
-    //[project url]/api/2015-12-25
-    //[project url]/api/1451001600000
+app.get('/api/:date?', (req, res) => {
+    let date;
 
-    let isUnix = req.params.date.match(/\d{13}/) !== null;
-    let isYYMMDD = req.params.date.match(/\d{4}-\d{1,2}-\d{1,2}/) !== null;
-
-    if (!isUnix && !isYYMMDD) {
-      res.json({"error":"Invalid Date"});
+    if (req.params.date === undefined) {
+      date = new Date();
     }
     else {
-      input = isUnix ? parseInt(req.params.date) : req.params.date;
-      let date = new Date(input);
-      let unixTimeStamp =  Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
-      res.json({unix: unixTimeStamp, utc: date.toUTCString()});
+      let isUnix = req.params.date.match(/\d{13}/) !== null;
+      date = isUnix ? new Date(parseInt(req.params.date)) : new Date(req.params.date);
+
+      if (date == "Invalid Date") {
+        return res.json({"error":"Invalid Date"});
+      }
     }
+
+    let unixTimeStamp =  Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+    let UTCString = date.toUTCString();
+
+    return res.json({unix: unixTimeStamp, utc: UTCString});
   });
