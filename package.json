@@ -1,0 +1,23 @@
+{
+	"name": "Timestamp Microservice",
+	"author": "Jacob Rowland",
+	"description": "Express Timestamp API",
+	"version": "1.2.0",
+	"license": "MIT",
+	"keywords": [
+		"freecodecamp",
+		"npm",
+		"back-end"
+	],
+	"dependencies": {
+		"express": "^4.14.0"
+	},
+	"main": "server.js",
+	"scripts": {
+		"start": "node server.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": ""
+	}
+}
