@@ -6,8 +6,8 @@
 	"license": "MIT",
 	"keywords": [
 		"freecodecamp",
-		"npm",
-		"back-end"
+		"express",
+		"timestamp"
 	],
 	"dependencies": {
 		"express": "^4.14.0"
